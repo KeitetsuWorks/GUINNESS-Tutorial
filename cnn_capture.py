@@ -4,9 +4,9 @@
 #
 # Creation Date   : 06/Aug./2017
 # Copyright (C) <2017> Hiroki Nakahara, All rights reserved.
-# 
+#
 # Released under the GPL v2.0 License.
-# 
+#
 # -----------------------------------------------------------------------
 
 # -*- coding:utf-8 -*-
@@ -59,7 +59,7 @@ if __name__=="__main__":
     capture = cv2.VideoCapture(1)
     capture.set(3, 640)
     capture.set(4, 480)
-    
+
     if capture.isOpened() is False:
         raise("Camera IO Error")
 
@@ -80,7 +80,7 @@ if __name__=="__main__":
         image[0:imgsize,0:imgsize] = cropped
 
         key = cv2.waitKey(33) # wait 33 msec (30FPS)
-        
+
         if is_auto == 0:
             if key == 27: # [ESC] Key
                 print("ESC Key (Terminate)")
@@ -90,7 +90,7 @@ if __name__=="__main__":
                 print("Space Key (Inference a Single Image)")
                 cropped = cropped.astype(np.uint8).tobytes('C')
                 clientsock.send(cropped) # send image to the FPGA
-            
+
                 print("recv...")
                 rcvmsg = clientsock.recv(1024) # receive from the FPGA
 
@@ -111,7 +111,7 @@ if __name__=="__main__":
             start = time.time()
             cropped = cropped.astype(np.uint8).tobytes('C')
             clientsock.send(cropped)
-            
+
             rcvmsg = clientsock.recv(1024)
 
             idx = 0
