@@ -52,8 +52,7 @@ if __name__ == '__main__':
         for line in lines:
             obj_label.append(line.rstrip('\n\r'))
 
-    print("[INFO] TAGS="),
-    print(obj_label)
+    print("[INFO] TAGS = %s" % (obj_label))
 
     # set image size
     imgsize = args.size
@@ -75,8 +74,8 @@ if __name__ == '__main__':
 
     # Setup Video Camera
     capture = cv2.VideoCapture(0)
-    capture.set(3, 640)
-    capture.set(4, 480)
+    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     if capture.isOpened() is False:
         raise("Camera IO Error")
@@ -91,7 +90,7 @@ if __name__ == '__main__':
         if ret == False:
             continue
 
-        cropped = image[0:480, 0:480] # [y:y+h, x:x+w]
+        cropped = image[0:480, 80:560] # [y:y+h, x:x+w]
         cropped = cv2.resize(cropped, (imgsize, imgsize))
 
         image[0:imgsize, 0:imgsize] = cropped
@@ -108,13 +107,13 @@ if __name__ == '__main__':
                 cropped = cropped.astype(np.uint8).tobytes('C')
                 clientsock.send(cropped) # send image to the FPGA
 
-                print("recv...")
+                print("Receiving...")
                 rcvmsg = clientsock.recv(1024) # receive from the FPGA
 
                 idx = 0
                 for c in rcvmsg:
                     if idx < 3:
-                        print("received=%d (%s)" % (c, obj_label[idx]))
+                        print("%2d: %s = %d" % (idx, obj_label[idx], c))
                     idx += 1
 
             if key == 45: # [-] key
@@ -136,7 +135,7 @@ if __name__ == '__main__':
                     msg = obj_label[idx] + " = " + str(c)
                     font = cv2.FONT_HERSHEY_PLAIN
                     cv2.putText(image, msg, (10, 470 - (3 - idx) * 20), font, 0.8, (0, 0, 255))
-                    cv2.line(image, (100, 470 - (3 - idx) * 20), (100 + c * 2, 470 - (3 - idx) * 20), (0, 0, 255), 10)
+                    cv2.line(image, (160, 470 - (3 - idx) * 20), (160 + c * 2, 470 - (3 - idx) * 20), (0, 0, 255), 10)
                 idx += 1
 
         cv2.imshow("Capture", image)
