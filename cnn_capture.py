@@ -56,7 +56,7 @@ if __name__=="__main__":
     clientsock, client_address = serversock.accept()
 
     # Setup Video Camera
-    capture = cv2.VideoCapture(1)
+    capture = cv2.VideoCapture(0)
     capture.set(3, 640)
     capture.set(4, 480)
 
