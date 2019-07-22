@@ -52,8 +52,7 @@ if __name__ == '__main__':
         for line in lines:
             obj_label.append(line.rstrip('\n\r'))
 
-    print("[INFO] TAGS="),
-    print(obj_label)
+    print("[INFO] TAGS = %s" % (obj_label))
 
     # set image size
     imgsize = args.size
@@ -108,13 +107,13 @@ if __name__ == '__main__':
                 cropped = cropped.astype(np.uint8).tobytes('C')
                 clientsock.send(cropped) # send image to the FPGA
 
-                print("recv...")
+                print("Receiving...")
                 rcvmsg = clientsock.recv(1024) # receive from the FPGA
 
                 idx = 0
                 for c in rcvmsg:
                     if idx < 3:
-                        print("received=%d (%s)" % (c, obj_label[idx]))
+                        print("%2d: %s = %d" % (idx, obj_label[idx], c))
                     idx += 1
 
             if key == 45: # [-] key
