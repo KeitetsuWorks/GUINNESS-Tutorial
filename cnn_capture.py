@@ -13,7 +13,6 @@
 import cv2
 import socket
 import numpy as np
-import time
 import argparse
 
 if __name__=="__main__":
@@ -108,7 +107,6 @@ if __name__=="__main__":
                 is_auto = 0
                 print("Stop Inference")
 
-            start = time.time()
             cropped = cropped.astype(np.uint8).tobytes('C')
             clientsock.send(cropped)
 
